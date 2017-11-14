@@ -7,5 +7,9 @@ module TimeMachine
     get '/clocks' do
       @@clocks
     end
+
+    post '/clocks' do
+      @@clocks << { message: "I am in the post" }
+    end
   end
 end

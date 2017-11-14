@@ -13,11 +13,18 @@ describe 'TimeMachine' do
     JSON.parse(last_response.body)
   end
 
-  describe 'GET' do
+  describe 'GET /clocks' do
     it 'returns an array' do
       get '/clocks'
       expect(last_response.status).to eq 200
       expect(response_body).to eq([])
+    end
+  end
+
+  describe 'POST /clocks' do
+    it 'should create a clock object' do
+      post '/clocks'
+      expect(last_response.status).to eq 201
     end
   end
 end
