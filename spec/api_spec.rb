@@ -25,6 +25,7 @@ describe 'TimeMachine' do
     it 'should create a clock object' do
       post '/clocks'
       expect(last_response.status).to eq 201
+      expect(response_body["message"]).to eq "I am in the post"
     end
   end
 end
