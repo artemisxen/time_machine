@@ -25,7 +25,13 @@ describe 'TimeMachine' do
     it 'should create a clock object' do
       post '/clocks'
       expect(last_response.status).to eq 201
-      expect(response_body["message"]).to eq "I am in the post"
+      expect(JSON.parse(response_body.last)['message']).to eq 'I am in the post'
+    end
+
+    it 'should add an id to every new clock' do
+      allow(SecureRandom).to receive(:hex).with(10).and_return('1ecc636f7a8d20b86106')
+      post '/clocks'
+      expect(JSON.parse(response_body.last)['id']).to eq '1ecc636f7a8d20b86106'
     end
   end
 end

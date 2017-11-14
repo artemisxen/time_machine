@@ -10,11 +10,7 @@ module TimeMachine
     end
 
     post '/clocks' do
-      obj = { "message" => "I am in the post" }.to_json
-      p JSON.parse(obj)["message"]
-      @@clocks << obj
-      p @@clocks
-      obj
+      @@clocks << { "message" => "I am in the post", "id" => SecureRandom.hex(10) }.to_json
     end
   end
 end
