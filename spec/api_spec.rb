@@ -17,7 +17,28 @@ describe 'TimeMachine' do
     it 'returns an array' do
       get '/clocks'
       expect(last_response.status).to eq 200
-      expect(response_body).to eq([])
+    end
+  end
+
+  describe 'GET /clocks/:id' do
+    it 'returns the clock object' do
+      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
+      post '/clocks'
+      get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+      expect(last_response.status).to eq 200
+    end
+
+    it 'returns json in the body' do
+      get '/clocks/blah'
+      p last_response.body
+      expect(JSON.parse(last_response.body)["message"]).to eq "I am in the get with id blah"
+    end
+  end
+
+  describe 'PATCH /clocks/:id' do
+    it 'should create a clock object' do
+      patch '/clocks/:id'
+      expect(last_response.status).to eq 200
     end
   end
 
@@ -25,13 +46,13 @@ describe 'TimeMachine' do
     it 'should create a clock object' do
       post '/clocks'
       expect(last_response.status).to eq 201
-      expect(JSON.parse(response_body.last)['message']).to eq 'I am in the post'
     end
+  end
 
-    it 'should add an id to every new clock' do
-      allow(SecureRandom).to receive(:hex).with(10).and_return('1ecc636f7a8d20b86106')
-      post '/clocks'
-      expect(JSON.parse(response_body.last)['id']).to eq '1ecc636f7a8d20b86106'
+  describe 'DELETE /clocks/:id' do
+    it 'should delete a clock object' do
+      delete '/clocks/:id'
+      expect(last_response.status).to eq 200
     end
   end
 end
