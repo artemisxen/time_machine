@@ -17,6 +17,7 @@ describe 'TimeMachine' do
     it 'returns an array' do
       get '/clocks'
       expect(last_response.status).to eq 200
+      expect(response_body).to eq []
     end
   end
 

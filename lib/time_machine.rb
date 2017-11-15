@@ -1,14 +1,14 @@
 require 'grape'
 require 'json'
 require 'pry'
+require './lib/clock'
 
 module TimeMachine
   class API < Grape::API
     format :json
-    @@clocks = []
 
     get '/clocks' do
-      { "message" => "I am in the get", "id" => SecureRandom.uuid }
+      Clock.clocks
     end
 
     post '/clocks' do
