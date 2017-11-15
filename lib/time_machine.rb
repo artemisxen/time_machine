@@ -12,7 +12,7 @@ module TimeMachine
     end
 
     post '/clocks' do
-      { "message" => "I am in the post", "id" => SecureRandom.uuid }
+      Clock.add_clock
     end
 
     get '/clocks/:id' do
