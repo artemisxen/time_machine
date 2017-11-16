@@ -10,18 +10,17 @@ module TimeMachine
     content_type :json, 'application/json'
 
     get '/clocks' do
-      ClockStore.clocks.each(&:current_time)
-      ClockStore.clocks.map(&:as_json)
+      ClockStore.display_clocks
     end
 
     post '/clocks' do
-      ClockStore.add_clock(Clock.new)
-      body ClockStore.clocks.last.as_json
-      header 'Location', "clocks/#{ClockStore.clocks.last.id}"
+      clock = Clock.new
+      ClockStore.add_clock(clock)
+      header 'Location', "clocks/#{clock.id}"
     end
 
     get '/clocks/:id' do
-      ClockStore.clocks.find { |clock| clock.id == params[:id]  }.as_json
+      ClockStore.find_clock(params[:id]).as_json
     end
 
     patch '/clocks/:id' do
@@ -29,7 +28,7 @@ module TimeMachine
     end
 
     delete '/clocks/:id' do
-      ClockStore.clocks.delete_if { |clock| clock.id == params[:id] }
+      ClockStore.delete_clock(params[:id])
     end
 
     delete '/clocks' do

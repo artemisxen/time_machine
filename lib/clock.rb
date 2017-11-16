@@ -1,13 +1,16 @@
 class Clock
-  attr_reader :id, :time
+  attr_reader :id
 
   def initialize
     @id = generate_id
-    @time = current_time
   end
 
   def current_time
-    @time = Time.now
+    Time.now
+  end
+
+  def time
+    current_time
   end
 
   def as_json
