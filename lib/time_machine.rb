@@ -8,8 +8,9 @@ module TimeMachine
   class API < Grape::API
     format :json
     content_type :json, 'application/json'
-    
+
     get '/clocks' do
+      ClockStore.clocks.each(&:current_time)
       ClockStore.clocks.map(&:as_json)
     end
 

@@ -21,6 +21,14 @@ describe 'TimeMachine' do
       expect(last_response.status).to eq 200
       expect(response_body).to eq []
     end
+
+    it 'updates the time of all the clocks to the current time' do
+      allow(Time).to receive(:now).and_return('2017-11-16 10:45:18 +0000')
+      post '/clocks'
+      allow(Time).to receive(:now).and_return('2017-11-16 10:45:30 +0000')
+      get '/clocks'
+      expect(response_body.first["time"]).to eq '2017-11-16 10:45:30 +0000'
+    end
   end
 
   describe 'GET /clocks/:id' do
@@ -35,7 +43,7 @@ describe 'TimeMachine' do
     end
 
     it 'returns json in the body' do
-      expect(JSON.parse(last_response.body)["id"]).to eq "2c82348f-0a9c-44af-896c-dfc3b6cbf196"
+      expect(response_body["id"]).to eq "2c82348f-0a9c-44af-896c-dfc3b6cbf196"
     end
   end
 
