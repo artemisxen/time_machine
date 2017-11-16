@@ -13,7 +13,7 @@ describe 'TimeMachine' do
     JSON.parse(last_response.body)
   end
 
-  before { Clock.clear_clocks }
+  before { ClockStore.clear_clocks }
 
   describe 'GET /clocks' do
     it 'returns an array' do
@@ -48,7 +48,7 @@ describe 'TimeMachine' do
   describe 'POST /clocks' do
     it 'should create a clock object' do
       post '/clocks'
-      expect(Clock.clocks).not_to be_empty
+      expect(ClockStore.clocks).not_to be_empty
       expect(last_response.status).to eq 201
     end
   end

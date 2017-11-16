@@ -1,12 +1,16 @@
-require 'clock'
-
 describe Clock do
-  before { Clock.clear_clocks}
-  it 'starts with an empty array' do
-    expect(Clock.clocks).to be_empty
+  subject(:clock) { described_class.new }
+  describe "#id" do
+    it "has a unique id" do
+      allow(SecureRandom).to receive(:uuid).and_return('aaaaaaa-bbbb-cccc-dddd-111111111111')
+      expect(clock.id).to eq("aaaaaaa-bbbb-cccc-dddd-111111111111")
+    end
   end
 
-  it 'should add a clock to clocks' do
-    expect{Clock.add_clock}.to change{Clock.clocks.length}.by 1
+  describe "#time" do
+    it "returns the clocks time" do
+      allow(Time).to receive(:now).and_return('2017-11-16 10:45:18 +0000')
+      expect(clock.time).to eq('2017-11-16 10:45:18 +0000')
+    end
   end
 end

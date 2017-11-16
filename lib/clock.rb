@@ -1,14 +1,19 @@
-module Clock
-  module_function
-  def clocks
-    @clocks ||= []
+class Clock
+  attr_reader :id, :time
+
+  def initialize
+    @id = generate_id
+    @time = current_time
   end
 
-  def add_clock
-    @clocks.push({ time: Time.now, id: SecureRandom.uuid })
+  private
+
+  def generate_id
+    SecureRandom.uuid
   end
 
-  def clear_clocks
-    @clocks = []
+  def current_time
+    Time.now
   end
+
 end

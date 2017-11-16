@@ -2,17 +2,18 @@ require 'grape'
 require 'json'
 require 'pry'
 require './lib/clock'
+require './lib/clock_store'
 
 module TimeMachine
   class API < Grape::API
     format :json
 
     get '/clocks' do
-      Clock.clocks
+      ClockStore.clocks
     end
 
     post '/clocks' do
-      Clock.add_clock
+      ClockStore.add_clock(Clock.new)
     end
 
     get '/clocks/:id' do
