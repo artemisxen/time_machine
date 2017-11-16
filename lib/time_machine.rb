@@ -29,7 +29,7 @@ module TimeMachine
     end
 
     delete '/clocks/:id' do
-      { "message" => "I am in the get with id #{params[:id]}", "id" => params[:id] }
+      ClockStore.clocks.delete_if { |clock| clock.id == params[:id] }
     end
 
     delete '/clocks' do
