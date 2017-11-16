@@ -6,6 +6,10 @@ class Clock
     @time = current_time
   end
 
+  def as_json
+    { id: id, time: time}
+  end
+
   private
 
   def generate_id

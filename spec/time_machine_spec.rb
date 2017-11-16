@@ -24,17 +24,18 @@ describe 'TimeMachine' do
   end
 
   describe 'GET /clocks/:id' do
-    it 'returns the clock object' do
+    before do
       allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
       post '/clocks'
       get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+    end
+
+    it 'returns the clock object' do
       expect(last_response.status).to eq 200
     end
 
     it 'returns json in the body' do
-      get '/clocks/blah'
-      p last_response.body
-      expect(JSON.parse(last_response.body)["message"]).to eq "I am in the get with id blah"
+      expect(JSON.parse(last_response.body)["id"]).to eq "2c82348f-0a9c-44af-896c-dfc3b6cbf196"
     end
   end
 

@@ -7,17 +7,19 @@ require './lib/clock_store'
 module TimeMachine
   class API < Grape::API
     format :json
-
+    content_type :json, 'application/json'
+    
     get '/clocks' do
-      ClockStore.clocks
+      ClockStore.clocks.map(&:as_json)
     end
 
     post '/clocks' do
       ClockStore.add_clock(Clock.new)
+      body ClockStore.clocks.last.as_json
     end
 
     get '/clocks/:id' do
-      { "message" => "I am in the get with id #{params[:id]}", "id" => params[:id] }
+      ClockStore.clocks.find { |clock| clock.id == params[:id]  }.as_json
     end
 
     patch '/clocks/:id' do
