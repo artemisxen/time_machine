@@ -1,3 +1,5 @@
+require 'clock'
+
 describe Clock do
   subject(:clock) { described_class.new }
 
@@ -12,8 +14,9 @@ describe Clock do
     end
   end
 
-  describe "#time" do
+  describe "#current_time" do
     it "returns the clocks time" do
+      clock.current_time
       expect(clock.time).to eq('2017-11-16 10:45:18 +0000')
     end
   end

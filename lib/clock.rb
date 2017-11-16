@@ -6,6 +6,10 @@ class Clock
     @time = current_time
   end
 
+  def current_time
+    @time = Time.now
+  end
+
   def as_json
     { id: id, time: time}
   end
@@ -14,10 +18,6 @@ class Clock
 
   def generate_id
     SecureRandom.uuid
-  end
-
-  def current_time
-    Time.now
   end
 
 end
