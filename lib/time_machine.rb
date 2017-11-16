@@ -24,7 +24,8 @@ module TimeMachine
     end
 
     patch '/clocks/:id' do
-      { "message" => "I am in the patch with id #{params[:id]}", "id" => params[:id] }.to_json
+      p params
+      ClockStore.find_clock(params[:id]).set_fake_time(params[:faketime])
     end
 
     delete '/clocks/:id' do

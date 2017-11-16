@@ -13,14 +13,14 @@ module ClockStore
   end
 
   def find_clock(id)
-    @clocks.find { |clock| clock.id == id}
+    clocks.find { |clock| clock.id == id}
   end
 
   def delete_clock(id)
-    @clocks.delete_if { |clock| clock.id == id }
+    clocks.delete_if { |clock| clock.id == id }
   end
 
   def display_clocks
-    @clocks.map(&:as_json)
+    clocks.map(&:as_json)
   end
 end

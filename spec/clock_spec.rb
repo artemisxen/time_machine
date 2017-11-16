@@ -14,6 +14,21 @@ describe Clock do
     end
   end
 
+  describe "#time" do
+    context 'there is no fake time' do
+      it "should return the current time" do
+        expect(clock.time).to eq('2017-11-16 10:45:18 +0000')
+      end
+    end
+
+    context 'there is a fake time' do
+      it "should return the faked time" do
+        clock.set_fake_time('2017-11-16 00:00:00 +0000')
+        expect(clock.time).to eq('2017-11-16 00:00:00 +0000')
+      end
+    end
+  end
+
   describe "#current_time" do
     it "returns the clocks time" do
       clock.current_time
@@ -24,6 +39,13 @@ describe Clock do
   describe "#json" do
     it "gives json format to the object" do
       expect(clock.as_json).to eq ({"id": "aaaaaaa-bbbb-cccc-dddd-111111111111", "time": "2017-11-16 10:45:18 +0000"})
+    end
+  end
+
+  describe "#set_fake_time" do
+    it "returns a specified time" do
+      clock.set_fake_time('2017-11-16 00:00:00:00 +0000')
+      expect(clock.fake_time).to eq '2017-11-16 00:00:00:00 +0000'
     end
   end
 end
