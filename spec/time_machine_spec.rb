@@ -55,10 +55,18 @@ describe 'TimeMachine' do
   end
 
   describe 'POST /clocks' do
-    it 'should create a clock object' do
+    before do
+      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
       post '/clocks'
+    end
+
+    it 'should create a clock object' do
       expect(ClockStore.clocks).not_to be_empty
       expect(last_response.status).to eq 201
+    end
+
+    it 'headers should include location' do
+      expect(last_response.headers["Location"]).to eq 'clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
     end
   end
 
@@ -66,6 +74,15 @@ describe 'TimeMachine' do
     it 'should delete a clock object' do
       delete '/clocks/:id'
       expect(last_response.status).to eq 200
+    end
+  end
+
+  describe 'DELETE /clocks' do
+    it 'should delete all clocks' do
+      post '/clocks'
+      delete '/clocks'
+      expect(last_response.status).to eq 204
+      expect(response_body).to be_empty
     end
   end
 end

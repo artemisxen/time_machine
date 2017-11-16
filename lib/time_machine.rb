@@ -17,6 +17,7 @@ module TimeMachine
     post '/clocks' do
       ClockStore.add_clock(Clock.new)
       body ClockStore.clocks.last.as_json
+      header 'Location', "clocks/#{ClockStore.clocks.last.id}"
     end
 
     get '/clocks/:id' do
@@ -29,6 +30,10 @@ module TimeMachine
 
     delete '/clocks/:id' do
       { "message" => "I am in the get with id #{params[:id]}", "id" => params[:id] }
+    end
+
+    delete '/clocks' do
+      ClockStore.clear_clocks
     end
   end
 end
