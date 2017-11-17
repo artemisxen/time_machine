@@ -38,7 +38,7 @@ describe Clock do
 
   describe "#json" do
     it "gives json format to the object" do
-      expect(clock.as_json).to eq ({"id": "aaaaaaa-bbbb-cccc-dddd-111111111111", "time": "2017-11-16 10:45:18 +0000"})
+      expect(clock.as_json).to eq ({"id": "aaaaaaa-bbbb-cccc-dddd-111111111111", "time": "2017-11-16 10:45:18 +0000", "counter": 0})
     end
   end
 

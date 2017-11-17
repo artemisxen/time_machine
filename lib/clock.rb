@@ -3,6 +3,7 @@ class Clock
 
   def initialize
     @id = generate_id
+    @counter = 0
   end
 
   def current_time
@@ -19,7 +20,7 @@ class Clock
   end
 
   def as_json
-    { id: id, time: time }
+    { id: id, time: time, counter: counter }
   end
 
   private

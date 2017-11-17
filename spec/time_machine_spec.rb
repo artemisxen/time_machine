@@ -42,19 +42,33 @@ describe 'TimeMachine' do
   end
 
   describe 'PATCH /clocks/:id' do
-    before { post '/clocks' }
+    before do
+      post '/clocks'
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+0000', counter: 1}
+    end
 
-    it 'should set time to a fake time' do
-      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+0000'}
+    it 'should set time and return 200' do
       expect(last_response.status).to eq 200
     end
 
+    it 'should set the time to fake time' do
+      get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+      expect(response_body["time"]).to eq '2017-11-16T00:00:00+00:00'
+    end
+
+    it 'should set the counter' do
+      get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+      expect(response_body["counter"]).to eq "1"
+    end
+  end
+
+  describe 'PATCH /clocks/:id validations' do
     it 'should not change the time if no time is supplied' do
       patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', {}
       expect(last_response.status).to eq 400
     end
 
-    it 'should not change the time if it is not provided in ISO8601' do
+    it 'should not change the time if it is not provided in DateTime' do
       patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: 'time'}
       expect(last_response.status).to eq 400
     end
