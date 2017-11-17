@@ -28,7 +28,7 @@ module TimeMachine
       requires :time, type: DateTime
     end
     patch '/clocks/:id' do
-      ClockStore.find(params[:id]).set_fake_time(params[:time])
+      ClockStore.find(params[:id]).set_fake_time(params[:time], params[:counter])
       body '{}'
     end
 

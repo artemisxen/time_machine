@@ -23,7 +23,7 @@ describe Clock do
 
     context 'there is a fake time' do
       it "should return the faked time" do
-        clock.set_fake_time('2017-11-16 00:00:00 +0000')
+        clock.set_fake_time('2017-11-16 00:00:00 +0000', 1)
         expect(clock.time).to eq('2017-11-16 00:00:00 +0000')
       end
     end
@@ -44,8 +44,14 @@ describe Clock do
 
   describe "#set_fake_time" do
     it "returns a specified time" do
-      clock.set_fake_time('2017-11-16 00:00:00:00 +0000')
-      expect(clock.fake_time).to eq '2017-11-16 00:00:00:00 +0000'
+      clock.set_fake_time('2017-11-16T00:00:00:00+0000', 1)
+      expect(clock.fake_time).to eq '2017-11-16T00:00:00:00+0000'
     end
+
+    it "should set the counter to according to the param received" do
+      clock.set_fake_time('2017-11-16T00:00:00:00+0000', 1)
+      expect(clock.counter).to eq 1
+    end
+
   end
 end

@@ -1,5 +1,5 @@
 class Clock
-  attr_reader :id, :counter, :fake_time
+  attr_reader :id, :counter, :fake_time, :counter
 
   def initialize
     @id = generate_id
@@ -13,8 +13,9 @@ class Clock
     @fake_time || current_time
   end
 
-  def set_fake_time(timestamp)
-    @fake_time = timestamp
+  def set_fake_time(timestamp, counter)
+    @fake_time = timestamp#
+    @counter = counter
   end
 
   def as_json
