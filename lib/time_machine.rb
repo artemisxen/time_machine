@@ -9,18 +9,18 @@ module TimeMachine
     format :json
 
     get '/clocks' do
-      ClockStore.display_clocks
+      ClockStore.as_json
     end
 
     post '/clocks' do
       clock = Clock.new
-      ClockStore.add_clock(clock)
+      ClockStore.add(clock)
       header 'Location', "clocks/#{clock.id}"
       body '{}'
     end
 
     get '/clocks/:id' do
-      ClockStore.find_clock(params[:id]).as_json
+      ClockStore.find(params[:id]).as_json
     end
 
     desc 'patch updates the time with a fake time'
@@ -28,12 +28,12 @@ module TimeMachine
       requires :time, type: DateTime
     end
     patch '/clocks/:id' do
-      ClockStore.find_clock(params[:id]).set_fake_time(params[:time])
+      ClockStore.find(params[:id]).set_fake_time(params[:time])
       body '{}'
     end
 
     delete '/clocks/:id' do
-      ClockStore.delete_clock(params[:id])
+      ClockStore.delete(params[:id])
       body '{}'
     end
   end

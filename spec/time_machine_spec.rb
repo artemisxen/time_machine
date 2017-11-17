@@ -14,7 +14,7 @@ describe 'TimeMachine' do
   end
 
   before do
-    ClockStore.clear_clocks
+    ClockStore.clear
     allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
   end
 
@@ -45,7 +45,7 @@ describe 'TimeMachine' do
     before { post '/clocks' }
 
     it 'should set time to a fake time' do
-      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16 00:00:00 +0000'}
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+0000'}
       expect(last_response.status).to eq 200
     end
 
@@ -54,7 +54,7 @@ describe 'TimeMachine' do
       expect(last_response.status).to eq 400
     end
 
-    it 'should not change the time if it is not provided as DateTime' do
+    it 'should not change the time if it is not provided in ISO8601' do
       patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: 'time'}
       expect(last_response.status).to eq 400
     end

@@ -4,23 +4,23 @@ module ClockStore
     @clocks ||= []
   end
 
-  def add_clock(clock)
+  def add(clock)
     clocks.push(clock)
   end
 
-  def clear_clocks
+  def clear
     @clocks = []
   end
 
-  def find_clock(id)
+  def find(id)
     clocks.find { |clock| clock.id == id}
   end
 
-  def delete_clock(id)
+  def delete(id)
     clocks.delete_if { |clock| clock.id == id }
   end
 
-  def display_clocks
+  def as_json
     clocks.map(&:as_json)
   end
 end
