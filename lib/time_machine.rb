@@ -16,6 +16,7 @@ module TimeMachine
       clock = Clock.new
       ClockStore.add_clock(clock)
       header 'Location', "clocks/#{clock.id}"
+      body '{}'
     end
 
     get '/clocks/:id' do
@@ -28,14 +29,12 @@ module TimeMachine
     end
     patch '/clocks/:id' do
       ClockStore.find_clock(params[:id]).set_fake_time(params[:time])
+      body '{}'
     end
 
     delete '/clocks/:id' do
       ClockStore.delete_clock(params[:id])
-    end
-
-    delete '/clocks' do
-      ClockStore.clear_clocks
+      body '{}'
     end
   end
 end
