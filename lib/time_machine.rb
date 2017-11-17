@@ -20,7 +20,9 @@ module TimeMachine
     end
 
     get '/clocks/:id' do
-      ClockStore.find(params[:id]).as_json
+      clock = ClockStore.find(params[:id])
+      body clock.as_json
+      clock.reduce_counter
     end
 
     desc 'patch updates the time with a fake time'

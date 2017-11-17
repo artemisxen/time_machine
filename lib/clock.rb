@@ -16,7 +16,11 @@ class Clock
 
   def set_fake_time(timestamp, counter)
     @fake_time = timestamp#
-    @counter = counter
+    @counter = counter.to_i
+  end
+
+  def reduce_counter
+    @counter -= 1 unless @counter == 0
   end
 
   def as_json

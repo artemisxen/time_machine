@@ -54,4 +54,16 @@ describe Clock do
     end
 
   end
+
+  describe "#reduce_counter" do
+    it "lowers counter by 1" do
+      clock.set_fake_time('2017-11-16T00:00:00:00+0000', 1)
+      clock.reduce_counter
+      expect(clock.counter).to eq 0
+    end
+
+    it "should not reduce counter if counter is 0" do
+      expect{clock.reduce_counter}.to_not change{clock.counter}
+    end
+  end
 end

@@ -39,6 +39,13 @@ describe 'TimeMachine' do
     it 'returns json in the body' do
       expect(response_body["id"]).to eq "2c82348f-0a9c-44af-896c-dfc3b6cbf196"
     end
+
+    it 'reduces counter by 1 if a clock has been faked' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+0000', counter: 1}
+      get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+      get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
+      expect(response_body["counter"]).to eq 0
+    end
   end
 
   describe 'PATCH /clocks/:id' do
@@ -58,7 +65,7 @@ describe 'TimeMachine' do
 
     it 'should set the counter' do
       get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
-      expect(response_body["counter"]).to eq "1"
+      expect(response_body["counter"]).to eq 1
     end
   end
 
