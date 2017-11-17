@@ -11,7 +11,7 @@ class Clock
   end
 
   def time
-    @fake_time || current_time
+    @fake_time && @counter > 0 ? @fake_time : current_time
   end
 
   def set_fake_time(timestamp, counter)
