@@ -7,7 +7,6 @@ require './lib/clock_store'
 module TimeMachine
   class API < Grape::API
     format :json
-    content_type :json, 'application/json'
 
     get '/clocks' do
       ClockStore.display_clocks
@@ -23,9 +22,12 @@ module TimeMachine
       ClockStore.find_clock(params[:id]).as_json
     end
 
+    desc 'patch updates the time with a fake time'
+    params do
+      requires :time, type: DateTime
+    end
     patch '/clocks/:id' do
-      p params
-      ClockStore.find_clock(params[:id]).set_fake_time(params[:faketime])
+      ClockStore.find_clock(params[:id]).set_fake_time(params[:time])
     end
 
     delete '/clocks/:id' do

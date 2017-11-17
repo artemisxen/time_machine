@@ -13,7 +13,10 @@ describe 'TimeMachine' do
     JSON.parse(last_response.body)
   end
 
-  before { ClockStore.clear_clocks }
+  before do
+    ClockStore.clear_clocks
+    allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
+  end
 
   describe 'GET /clocks' do
     it 'returns an array' do
@@ -25,7 +28,6 @@ describe 'TimeMachine' do
 
   describe 'GET /clocks/:id' do
     before do
-      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
       post '/clocks'
       get '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
     end
@@ -40,18 +42,27 @@ describe 'TimeMachine' do
   end
 
   describe 'PATCH /clocks/:id' do
-    it 'should create a clock object' do
-      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
-      post '/clocks'
-      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { faketime: '2017-11-16 00:00:00 +0000'}
+    before { post '/clocks' }
+
+    it 'should set time to a fake time' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16 00:00:00 +0000'}
       expect(last_response.status).to eq 200
-      expect(response_body).to eq '2017-11-16 00:00:00 +0000'
+      expect(response_body).to eq '2017-11-16T00:00:00+00:00'
+    end
+
+    it 'should not change the time if no time is supplied' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', {}
+      expect(last_response.status).to eq 400
+    end
+
+    it 'should not change the time if it is not provided as DateTime' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: 'time'}
+      expect(last_response.status).to eq 400
     end
   end
 
   describe 'POST /clocks' do
     before do
-      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
       post '/clocks'
     end
 
@@ -67,7 +78,6 @@ describe 'TimeMachine' do
 
   describe 'DELETE /clocks/:id' do
     before do
-      allow(SecureRandom).to receive(:uuid).and_return('2c82348f-0a9c-44af-896c-dfc3b6cbf196')
       post '/clocks'
     end
 
@@ -79,7 +89,6 @@ describe 'TimeMachine' do
 
   describe 'DELETE /clocks' do
     it 'should delete all clocks' do
-      post '/clocks'
       delete '/clocks'
       expect(last_response.status).to eq 204
       expect(response_body).to be_empty
