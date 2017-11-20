@@ -20,6 +20,7 @@ module TimeMachine
     desc 'reads all the clocks'
     get '/clocks' do
       logger.debug("GET")
+      logger.error
       ClockStore.as_json
     end
 
@@ -27,6 +28,7 @@ module TimeMachine
     post '/clocks' do
       clock = Clock.new
       ClockStore.add(clock)
+      logger.debug("Location: clocks/#{clock.id}")
       header 'Location', "clocks/#{clock.id}"
       body '{}'
     end
@@ -45,6 +47,8 @@ module TimeMachine
     end
     patch '/clocks/:id' do
       ClockStore.find(params[:id]).set_fake_time(params[:time], params[:counter])
+      logger.debug("id: #{params[:id]}, time: #{params[:time]}, counter: #{params[:counter]}")
+      logger.error
       body '{}'
     end
 
