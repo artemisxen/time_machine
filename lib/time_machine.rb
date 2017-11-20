@@ -1,15 +1,25 @@
 require 'grape'
 require 'json'
 require 'pry'
+require 'yaml'
 require './lib/clock'
 require './lib/clock_store'
+require './lib/time_machine_logger'
 
 module TimeMachine
   class API < Grape::API
     format :json
+    TimeMachineLogger.logger.level = TimeMachineLogger.config["level"]
+
+    helpers do
+      def logger
+        TimeMachineLogger.logger
+      end
+    end
 
     desc 'reads all the clocks'
     get '/clocks' do
+      logger.debug("GET")
       ClockStore.as_json
     end
 
