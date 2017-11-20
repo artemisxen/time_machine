@@ -1,22 +1,19 @@
 class Clock
-  attr_reader :id, :counter, :fake_time, :counter
+
+  attr_reader :id, :counter, :fake_time
 
   def initialize
     @id = generate_id
     @counter = 0
   end
 
-  def current_time
-    Time.now
-  end
-
   def time
-    @fake_time || current_time
+    fake_time || current_time
   end
 
   def set_fake_time(timestamp, counter)
-    @fake_time = timestamp#
-    @counter = counter.to_i
+    @fake_time = timestamp
+    @counter = counter
   end
 
   def reduce_counter
@@ -31,6 +28,10 @@ class Clock
 
   def generate_id
     SecureRandom.uuid
+  end
+
+  def current_time
+    Time.now
   end
 
 end

@@ -51,7 +51,7 @@ describe 'TimeMachine' do
   describe 'PATCH /clocks/:id' do
     before do
       post '/clocks'
-      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+0000', counter: 1}
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+00:00', counter: 1}
     end
 
     it 'should set time and return 200' do
@@ -70,14 +70,28 @@ describe 'TimeMachine' do
   end
 
   describe 'PATCH /clocks/:id validations' do
+    before { post '/clocks' }
+
     it 'should not change the time if no time is supplied' do
       patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', {}
       expect(last_response.status).to eq 400
     end
 
-    it 'should not change the time if it is not provided in DateTime' do
-      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: 'time'}
+    it 'should throw error if it is not provided in iso8601' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-17 16:46:37 +00:00', counter: 1}
       expect(last_response.status).to eq 400
+      expect(response_body["error"]).to eq ("time is invalid")
+    end
+
+    it 'should throw error if counter is not provided' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+00:00'}
+      expect(last_response.status).to eq 400
+    end
+
+    it 'should throw error if counter is not provided as an integer' do
+      patch '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196', { time: '2017-11-16T00:00:00+00:00', counter: "one" }
+      expect(last_response.status).to eq 400
+      expect(response_body["error"]).to eq "counter is invalid"
     end
   end
 

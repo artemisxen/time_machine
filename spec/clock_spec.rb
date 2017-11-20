@@ -29,9 +29,8 @@ describe Clock do
     end
   end
 
-  describe "#current_time" do
+  describe "#time" do
     it "returns the clocks time" do
-      clock.current_time
       expect(clock.time).to eq('2017-11-16 10:45:18 +0000')
     end
   end
@@ -45,7 +44,7 @@ describe Clock do
   describe "#set_fake_time" do
     it "returns a specified time" do
       clock.set_fake_time('2017-11-16T00:00:00:00+0000', 1)
-      expect(clock.fake_time).to eq '2017-11-16T00:00:00:00+0000'
+      expect(clock.time).to eq '2017-11-16T00:00:00:00+0000'
     end
 
     it "should set the counter to according to the param received" do
