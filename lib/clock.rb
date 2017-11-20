@@ -1,6 +1,5 @@
 class Clock
-
-  attr_reader :id, :counter, :fake_time
+  attr_reader :id, :counter
 
   def initialize
     @id = generate_id
@@ -8,16 +7,16 @@ class Clock
   end
 
   def time
-    @fake_time && @counter > 0 ? @fake_time : current_time
+    fake_time && counter > 0 ? fake_time : current_time
   end
 
   def set_fake_time(timestamp, counter)
-    @fake_time = timestamp
-    @counter = counter
+    self.fake_time = timestamp
+    self.counter = counter
   end
 
   def reduce_counter
-    @counter -= 1 unless @counter == 0
+    self.counter -= 1 unless counter == 0
   end
 
   def as_json
@@ -25,6 +24,8 @@ class Clock
   end
 
   private
+  attr_accessor :fake_time
+  attr_writer :counter
 
   def generate_id
     SecureRandom.uuid
