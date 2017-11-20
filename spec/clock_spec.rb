@@ -21,10 +21,17 @@ describe Clock do
       end
     end
 
-    context 'there is a fake time' do
+    context 'fake_time and counter > 1' do
       it "should return the faked time" do
         clock.set_fake_time('2017-11-16 00:00:00 +0000', 1)
         expect(clock.time).to eq('2017-11-16 00:00:00 +0000')
+      end
+    end
+
+    context 'fake_time and counter == 0' do
+      it 'should not change the time to fake_time if counter == 0' do
+        clock.set_fake_time('2017-11-16 00:00:00 +0000', 0)
+        expect(clock.time).to eq('2017-11-16 10:45:18 +0000')
       end
     end
   end
