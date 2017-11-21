@@ -37,7 +37,7 @@ module TimeMachine
     get '/clocks/:id' do
       clock = ClockStore.find(params[:id])
       logger.error("get /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless clock
-      logger.info("get /clocks/#{clock.id}")
+      logger.info("get /clocks/#{clock.id}, id: #{params[:id]}")
       body clock.as_json
       clock.reduce_counter
     end
