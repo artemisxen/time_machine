@@ -19,22 +19,25 @@ module TimeMachine
 
     desc 'reads all the clocks'
     get '/clocks' do
-      logger.debug("GET")
-      logger.error
+      logger.debug("get /clocks")
       ClockStore.as_json
     end
 
     desc 'creates new clock'
     post '/clocks' do
+      logger.debug("post /clocks")
+      logger.info("post /clocks, location: clocks/#{clock.id} ")
       clock = Clock.new
       ClockStore.add(clock)
-      logger.debug("Location: clocks/#{clock.id}")
       header 'Location', "clocks/#{clock.id}"
-      body '{}'
+      body({})
     end
 
     desc 'reads a clock with a specific id'
     get '/clocks/:id' do
+      logger.error("get /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
+      logger.debug("get /clocks/#{params[:id]}")
+      logger.info("get /clocks/#{params[:id]}, id: #{params[:id]}")
       clock = ClockStore.find(params[:id])
       body clock.as_json
       clock.reduce_counter
@@ -46,16 +49,20 @@ module TimeMachine
       requires :counter, type: Integer
     end
     patch '/clocks/:id' do
+      logger.error("patch /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
+      logger.debug("patch /clocks/#{params[:id]}")
+      logger.info("patch /clocks/#{params[:id]}, id: #{params[:id]}, time: #{params[:time]}, counter: #{params[:counter]}")
       ClockStore.find(params[:id]).set_fake_time(params[:time], params[:counter])
-      logger.debug("id: #{params[:id]}, time: #{params[:time]}, counter: #{params[:counter]}")
-      logger.error
-      body '{}'
+      body({})
     end
 
     desc 'deletes a clock with a specific id'
     delete '/clocks/:id' do
+      logger.error("delete /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
+      logger.debug("delete /clocks/#{params[:id]}")
+      logger.info("delete /clocks/#{params[:id]}, id: #{params[:id]}")
       ClockStore.delete(params[:id])
-      body '{}'
+      body({})
     end
   end
 end
