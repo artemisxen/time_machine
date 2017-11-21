@@ -119,7 +119,7 @@ describe 'TimeMachine' do
 
     it 'should delete a clock object' do
       delete '/clocks/2c82348f-0a9c-44af-896c-dfc3b6cbf196'
-      expect(last_response.status).to eq 200
+      expect(last_response.status).to eq 204
     end
   end
 end

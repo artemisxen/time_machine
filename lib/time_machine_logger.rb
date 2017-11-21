@@ -1,12 +1,12 @@
 require 'yaml'
 
-module TimeMachineLogger
-  module_function
-  def config
-    YAML.load_file('config.yml')
+class TimeMachineLogger
+
+  attr_reader :logger
+
+  def initialize
+    @logger = Logger.new(YAML.load_file('config.yml')['file_path'])
+    logger.level = YAML.load_file('config.yml')['level']
   end
 
-  def logger
-    Logger.new(config["file_path"])
-  end
 end

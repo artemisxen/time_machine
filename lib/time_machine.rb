@@ -9,11 +9,11 @@ require './lib/time_machine_logger'
 module TimeMachine
   class API < Grape::API
     format :json
-    TimeMachineLogger.logger.level = TimeMachineLogger.config["level"]
+    logger TimeMachineLogger.new
 
     helpers do
       def logger
-        TimeMachineLogger.logger
+        API.logger.logger
       end
     end
 
@@ -25,19 +25,17 @@ module TimeMachine
 
     desc 'creates new clock'
     post '/clocks' do
-      logger.debug("post /clocks")
-      logger.info("post /clocks, location: clocks/#{clock.id} ")
       clock = Clock.new
+      clock_location = clock.id
+      logger.info("post /clocks, location: clocks/#{clock_location}")
       ClockStore.add(clock)
-      header 'Location', "clocks/#{clock.id}"
+      header 'Location', "clocks/#{clock_location}"
       body({})
     end
 
     desc 'reads a clock with a specific id'
     get '/clocks/:id' do
       logger.error("get /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
-      logger.debug("get /clocks/#{params[:id]}")
-      logger.info("get /clocks/#{params[:id]}, id: #{params[:id]}")
       clock = ClockStore.find(params[:id])
       body clock.as_json
       clock.reduce_counter
@@ -49,10 +47,11 @@ module TimeMachine
       requires :counter, type: Integer
     end
     patch '/clocks/:id' do
-      logger.error("patch /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
+      clock = ClockStore.find(params[:id])
+      logger.error("patch /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless clock
       logger.debug("patch /clocks/#{params[:id]}")
       logger.info("patch /clocks/#{params[:id]}, id: #{params[:id]}, time: #{params[:time]}, counter: #{params[:counter]}")
-      ClockStore.find(params[:id]).set_fake_time(params[:time], params[:counter])
+      clock.set_fake_time(params[:time], params[:counter])
       body({})
     end
 
