@@ -19,7 +19,7 @@ module TimeMachine
 
     desc 'reads all the clocks'
     get '/clocks' do
-      logger.debug("get /clocks")
+      logger.info("get /clocks")
       ClockStore.as_json
     end
 
@@ -35,8 +35,9 @@ module TimeMachine
 
     desc 'reads a clock with a specific id'
     get '/clocks/:id' do
-      logger.error("get /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
       clock = ClockStore.find(params[:id])
+      logger.error("get /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless clock
+      logger.info("get /clocks/#{clock.id}")
       body clock.as_json
       clock.reduce_counter
     end
@@ -49,7 +50,6 @@ module TimeMachine
     patch '/clocks/:id' do
       clock = ClockStore.find(params[:id])
       logger.error("patch /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless clock
-      logger.debug("patch /clocks/#{params[:id]}")
       logger.info("patch /clocks/#{params[:id]}, id: #{params[:id]}, time: #{params[:time]}, counter: #{params[:counter]}")
       clock.set_fake_time(params[:time], params[:counter])
       body({})
@@ -58,7 +58,6 @@ module TimeMachine
     desc 'deletes a clock with a specific id'
     delete '/clocks/:id' do
       logger.error("delete /clocks/#{params[:id]}, clock #{params[:id]} does not exist") unless ClockStore.find(params[:id])
-      logger.debug("delete /clocks/#{params[:id]}")
       logger.info("delete /clocks/#{params[:id]}, id: #{params[:id]}")
       ClockStore.delete(params[:id])
       body({})
